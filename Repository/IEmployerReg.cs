@@ -1,4 +1,5 @@
-﻿using JobPortalAPI.ViewModel;
+﻿using JobPortalAPI.Model;
+using JobPortalAPI.ViewModel;
 
 namespace JobPortalAPI.Repository
 {
@@ -6,5 +7,6 @@ namespace JobPortalAPI.Repository
     {
         int AddCompanyDetails(EmployerDetails employerDetails);
         bool AddEmployer(EmployerDetails employerDetails);
+        Task<IEnumerable<CompanyDetails>> GetCompanyNames();
     }
 }

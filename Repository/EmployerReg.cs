@@ -1,6 +1,7 @@
 ﻿using JobPortalAPI.ViewModel;
 using System.Data.SqlClient;
 using System.Data;
+using JobPortalAPI.Model;
 
 namespace JobPortalAPI.Repository
 {
@@ -82,6 +83,37 @@ namespace JobPortalAPI.Repository
                 return true;
             }
             return false;
+        }
+        public async Task<IEnumerable<CompanyDetails>> GetCompanyNames()
+        {
+            string connectionString = _configuration.GetConnectionString("DefaultConnection");
+            List<CompanyDetails> companyList = new List<CompanyDetails>();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string query = "SELECT * FROM CompanyDetails";
+
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            CompanyDetails companyDetails = new CompanyDetails()
+                            {
+                                CompanyID = Convert.ToInt32(reader["CompanyID"]),
+                                CompanyName = Convert.ToString(reader["CompanyName"]),
+                                StartEmployeeRange = Convert.ToInt32(reader["StartEmployeeRange"]),
+                                EndEmployeeRange = Convert.ToInt64(reader["EndEmployeeRange"]),
+                                CAddress = Convert.ToString(reader["CAddress"])
+
+                            };
+                            companyList.Add(companyDetails);
+                        }
+                    }
+                }
+            }
+            return companyList;
         }
     }
 }

@@ -38,5 +38,16 @@ namespace JobPortalAPI.Controllers
             }
             return BadRequest("ServerError:Inserting Employer");
         }
+        [HttpGet]
+        public async Task<IActionResult> GetCompanies()
+        {
+            var companies = await _employerReg.GetCompanyNames();
+            if (companies == null) 
+            {
+                return BadRequest("Error in Retriving Company Details");
+            }
+            return Ok(companies);    
+        }
     }
+   
 }
